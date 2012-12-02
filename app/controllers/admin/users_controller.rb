@@ -8,8 +8,10 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def create
+    admin = params[:user].delete(:admin)
     @user = User.new(params[:user])
-    if @user.save
+    # @user.admin = params[:user][:admin] == "1"
+    if @user.save && @user.update_attribute("admin", admin == "1")
       flash[:notice] = "User has been created."
       redirect_to admin_users_path
     else
